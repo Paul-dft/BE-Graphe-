@@ -137,12 +137,35 @@ public class BinaryHeap<E extends Comparable<E>> implements PriorityQueue<E> {
 
     @Override
     public void remove(E x) throws ElementNotFoundException {
-    	for(E el : this.array) {
-    		if(el == x) {
-    			el = this.array.get(array.size());
-    			this.array.get(array.size()) = null;
+    	
+    	if (isEmpty())
+            throw new ElementNotFoundException(x);
+    	
+    	int index = 0;
+    	int verif = 1;
+    	
+    	E elem_fin = this.array.get(this.currentSize - 1);
+    	
+    	while(index<=this.currentSize-1 && verif == 1) {
+    		
+    		if(this.array.get(index) == x ) {
+    			verif = 0;
+    			this.arraySet(index, elem_fin);
+    			this.currentSize --;
+    			
     		}
+    		
+    		index ++;
+    		
     	}
+    	
+    	if (verif == 1) {
+    		throw new ElementNotFoundException(x);
+    	}
+    	
+        
+        percolateDown(index);	
+  
     }
 
     @Override
