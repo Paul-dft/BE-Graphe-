@@ -1,5 +1,6 @@
 package org.insa.graphs.model;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -30,13 +31,41 @@ public class Path {
      * @throws IllegalArgumentException If the list of nodes is not valid, i.e. two
      *         consecutive nodes in the list are not connected in the graph.
      * 
-     * @deprecated Need to be implemented.
+     * deprecated Need to be implemented.
      */
     public static Path createFastestPathFromNodes(Graph graph, List<Node> nodes)
             throws IllegalArgumentException {
         List<Arc> arcs = new ArrayList<Arc>();
-        // TODO:
+        List<Arc> arcs3 = new ArrayList<Arc>(); //liste des successeurs valides
+        Arc shortArc = null; //arc le plus court
+        
+        if (nodes.size() == 1) {
+        	return new Path(graph,nodes.get(0));}       
+        
+        for (int i = 0; i<nodes.size() -1; i++) {
+        	
+        	List<Arc> arcs2 = new ArrayList<Arc>(); //liste des successeurs
+        	arcs2 = nodes.get(i).getSuccessors();
+        	
+        	for (Arc arc : arcs2) {
+        		if (arc.getDestination() == nodes.get(i+1)) {arcs3.add(arc);}
+        	}
+        	
+        	if(arcs3.isEmpty()) {throw(new IllegalArgumentException("pas de chemin"));}
+        	
+        	for (Arc arc : arcs3) {
+        		double min = 1.0/0.0;
+        		if (arc.getMinimumTravelTime()<min) {
+        			min = arc.getMinimumTravelTime();
+        			shortArc = arc;
+        		}
+        	}
+        	
+        	arcs.add(shortArc);
+        
+        }
         return new Path(graph, arcs);
+  
     }
 
     /**
@@ -51,13 +80,83 @@ public class Path {
      * @throws IllegalArgumentException If the list of nodes is not valid, i.e. two
      *         consecutive nodes in the list are not connected in the graph.
      * 
-     * @deprecated Need to be implemented.
+     * deprecated Need to be implemented.
      */
     public static Path createShortestPathFromNodes(Graph graph, List<Node> nodes)
             throws IllegalArgumentException {
+        /*List<Arc> arcs = new ArrayList<Arc>(); //liste d'arc définitive
+        List<Arc> arcs3 = new ArrayList<Arc>(); //liste des successeurs valides
+        Arc shortArc = null; //arc le plus court
+        
+        if (nodes.size() == 1) {
+        	return new Path(graph,nodes.get(0));}
+        
+        for (int i = 0; i<nodes.size() -1; i++) {
+        	
+        	List<Arc> arcs2 = new ArrayList<Arc>(); //liste des successeurs
+        	arcs2 = nodes.get(i).getSuccessors();
+        	
+        	for (Arc arc : arcs2) {
+        		if (arc.getDestination() == nodes.get(i+1)) {arcs3.add(arc);}
+        	}
+        	
+        	if(arcs3.isEmpty()) {throw(new IllegalArgumentException("pas de chemin"));}
+        	
+        	for (Arc arc : arcs3) {
+        		double min = 1.0/0.0;
+        		if (arc.getLength()<min) {
+        			min = arc.getLength();
+        			shortArc = arc;
+        		}
+        	}
+        	
+        	arcs.add(shortArc);
+        
+        }
+        return new Path(graph, arcs);*/
+    	
+    	if (nodes.size() == 0) {
+        	return new Path(graph);
+        }
+        if (nodes.size() == 1) {
+        	return new Path(graph, nodes.get(0));
+        }
+        
         List<Arc> arcs = new ArrayList<Arc>();
-        // TODO:
+        
+        //For each nodes in the given list, except the last
+        for (int i = 0; i < nodes.size()-1; i++) {
+        	
+        	//Initialization
+        	Node node1 = nodes.get(i); //Origin
+        	Node node2 = nodes.get(i+1); //Destination
+        	//shortest arc is the first by default, even if it doesn't go to node2
+        	Arc shortest = node1.getSuccessors().get(0);
+
+        	//Test for each arc between the nodes and look for a faster arc, or at least one that goes to node2
+        	for (int k = 1; k < node1.getNumberOfSuccessors();k++) {
+        		Arc candidat = node1.getSuccessors().get(k);
+        		if (candidat.getDestination() == node2) { //Is the arc going where we want it to ?
+        			
+        			//if the first candidate wasn't going to node2 or if we found a faster arc
+        			if (shortest.getDestination() != node2 || candidat.getLength() < shortest.getLength() ) { // Is it faster ?
+        				shortest = candidat; // Update the shortest arc found
+        			}
+        		}
+        	}
+        	
+    		if (node2 != shortest.getDestination()) { // if nodes aren't connected
+    			throw (new IllegalArgumentException());
+    		}
+    		
+    		//If everything is OK, we append the shortest arc to the final list
+    		arcs.add(shortest);
+        }
+
         return new Path(graph, arcs);
+        
+    	
+    
     }
 
     /**
@@ -198,11 +297,23 @@ public class Path {
      * 
      * @return true if the path is valid, false otherwise.
      * 
-     * @deprecated Need to be implemented.
+     * deprecated Need to be implemented.
      */
     public boolean isValid() {
-        // TODO:
-        return false;
+        if (this.isEmpty()) {return true;} //condition 1
+        if (this.size() == 1) {return true;} // condition 2
+        
+        List<Arc> arc = getArcs();
+        
+        if(this.origin != arc.get(0).getOrigin()) {return false;} // on check que l'origine du path est celle du premier arc
+        
+        for (int i = 0; i<this.size() - 2; i++ ) { //pour chaque arc on check la condition 3
+			if (arc.get(i).getDestination() != arc.get(i+1).getOrigin()) {
+				return false;
+			}
+        }
+        
+    	return true;
     }
 
     /**
@@ -240,11 +351,15 @@ public class Path {
      * 
      * @return Minimum travel time to travel this path (in seconds).
      * 
-     * @deprecated Need to be implemented.
+     * deprecated Need to be implemented.
      */
     public double getMinimumTravelTime() {
-        // TODO:
-        return 0;
+    	float speed = 0;
+        for (Arc a : arcs) {
+			speed  +=  a.getMinimumTravelTime();
+        }
+    	return speed;
     }
+
 
 }

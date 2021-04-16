@@ -75,6 +75,7 @@ public final class Node implements Comparable<Node> {
     private final ArrayList<Arc> successors;
 
     /**
+     * 
      * Create a new Node with the given ID corresponding to the given Point with an
      * empty list of successors.
      * 
