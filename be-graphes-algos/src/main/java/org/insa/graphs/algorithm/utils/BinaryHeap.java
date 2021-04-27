@@ -164,7 +164,9 @@ public class BinaryHeap<E extends Comparable<E>> implements PriorityQueue<E> {
     	}
     	
         
-        percolateDown(index);	
+        for (int i= 0;i<this.currentSize;i++) {
+        	percolateDown(i);
+        }
   
     }
 
