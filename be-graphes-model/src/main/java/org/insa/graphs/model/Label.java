@@ -1,18 +1,29 @@
 package org.insa.graphs.model;
 
-public class Label {
+public class Label implements Comparable <Label>{
 	
-	int sommet_courant;
+	public Node sommet_courant;
 	
-	boolean marque = false;
+	public boolean marque = false;
 	
-	int cout;
+	public int cost;
 	
-	Arc pere;
+	public Arc pere;
 	
 	public int GetCost(Label label) {
-		return label.cout;
+		return label.cost;
 	}
+
+
+	public int compareTo(Label label_b) {
+		if (this.cost <= label_b.cost) {
+			return 1;
+		}
+		else {
+			return 0;
+		}
+	}
+
 	
 
 }
