@@ -21,6 +21,13 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
         final ShortestPathData data = getInputData();
         ShortestPathSolution solution = null;
         
+        Label min;
+        Label label_suivant;
+        Node noeud_min;
+        Node noeud_suivant;
+        int cost_inter;
+        
+        
         boolean verif = true;
     	
     	double cost_arc;
@@ -32,7 +39,7 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
     	BinaryHeap<Label> heap ;
     	
     	Node origine = data.getOrigin();
-    	Label Label_origin ;
+    	Label Label_origin;
     	Label_origin.sommet_courant = origine;
     	Label_origin.cost = 0;
     	Label_origin.pere = null;
@@ -65,11 +72,24 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
     	
     	while (heap.isEmpty() == false) {
     		
-    		destination = getSuccessors(findMin());
-    		for (Arc arc : destination) {
+    		min = heap.findMin();
+    		noeud_min = min.sommet_courant;
+    		
+    		for (Arc arc : noeud_min.getSuccessors()) {
+    			noeud_suivant = arc.getDestination();
     			cost_arc = arc.getMinimumTravelTime();
-    			arc.getDestination()
+    			
+    			label_suivant = LL[noeud_suivant.getId()];
+    			
+    			if (cost_arc < label_suivant.cost) {
+    				
+    				label_suivant.cost = cost_arc;
+    				label_suivant.pere = arc;
+    				
+    			}
     		}
+    		
+    		heap.remove(min);
     		
     	}
     	
