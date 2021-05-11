@@ -6,11 +6,11 @@ public class Label implements Comparable <Label>{
 	
 	public boolean marque = false;
 	
-	public int cost;
+	public double cost;
 	
 	public Arc pere;
 	
-	public int GetCost(Label label) {
+	public double GetCost(Label label) {
 		return label.cost;
 	}
 

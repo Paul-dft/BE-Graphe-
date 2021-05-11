@@ -1,8 +1,11 @@
 package org.insa.graphs.algorithm.shortestpath;
 
+import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
+import org.insa.graphs.algorithm.AbstractSolution.Status;
 import org.insa.graphs.algorithm.utils.BinaryHeap;
 import org.insa.graphs.model.Arc;
 import org.insa.graphs.model.Graph;
@@ -16,7 +19,8 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
         super(data);
     }
 
-    @Override
+    @SuppressWarnings("null")
+	@Override
     protected ShortestPathSolution doRun() {
         final ShortestPathData data = getInputData();
         ShortestPathSolution solution = null;
@@ -25,26 +29,29 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
         Label label_suivant;
         Node noeud_min;
         Node noeud_suivant;
-        int cost_inter;
+        
+        List<Arc> arc_final = null;
+        
+        Path path_sol = null;
         
         
-        boolean verif = true;
-    	
     	double cost_arc;
     	
-    	int E;
+    	BinaryHeap<Label> heap = null ;
     	
-    	List<Arc> destination = new ArrayList<Arc>();
-    	
-    	BinaryHeap<Label> heap ;
+    	// initialisation du Label origine 
     	
     	Node origine = data.getOrigin();
-    	Label Label_origin;
+    	Label Label_origin = null;
     	Label_origin.sommet_courant = origine;
     	Label_origin.cost = 0;
     	Label_origin.pere = null;
     	
+    	// récupération du graphe 
+    	
     	Graph graphe = data.getGraph();
+    	
+    	// création d'une liste de label pour permettre d'associer un noeud à un label
     	
     	Label[] LL;
     	
@@ -52,7 +59,7 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
     	
     	for(Node n : graphe.getNodes()) {
     		
-    		Label l;
+    		Label l = null;
     		l.cost = 1/0;
     		l.pere = null;
     		l.sommet_courant = n;
@@ -60,8 +67,12 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
     		
     	}
     	
+    	// on remplace le label origine dans la liste 
+    	
     	int var = origine.getId();
     	LL[var] = Label_origin;
+    	
+    	// on insert chaque label dans le tas 
     	
     	
     	for(Label l : LL) {
@@ -70,16 +81,26 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
     		
     	}
     	
+    	// tant que le temps n'est pas vide on continue notre algo
+    	
     	while (heap.isEmpty() == false) {
+    		
+    		// On prend le label avec le cout minimum
     		
     		min = heap.findMin();
     		noeud_min = min.sommet_courant;
     		
+    		// On regarde tous ses sucesseur 
+    		
     		for (Arc arc : noeud_min.getSuccessors()) {
+    			
     			noeud_suivant = arc.getDestination();
-    			cost_arc = arc.getMinimumTravelTime();
+    			//cost_arc = arc.getLength();
+    			cost_arc = data.getCost(arc);
     			
     			label_suivant = LL[noeud_suivant.getId()];
+    			
+    			// Si on se rend compte que le trajet est plus court on remplace le cost 
     			
     			if (cost_arc < label_suivant.cost) {
     				
@@ -89,11 +110,26 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
     			}
     		}
     		
+    		// On enleve notre noeud minimum 
+    		
+    		arc_final.add(min.pere);
     		heap.remove(min);
     		
     	}
     	
+    	
+    	
+    	
+    	//path_sol = solution.getPath();
+    	//solution.path.Path(graphe,arc_final);
+  
+    	//solution.ShortestPathSolution(data,,path_sol.Path(graphe,arc_final));
+        
+        solution = new ShortestPathSolution(data, Status.OPTIMAL, new Path(graph, arcs));
+    	
+    	
         return solution;
     }
+
 
 }
