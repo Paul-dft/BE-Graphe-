@@ -1,8 +1,5 @@
 package org.insa.graphs.algorithm.shortestpath;
 
-import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import org.insa.graphs.algorithm.AbstractSolution.Status;
@@ -10,8 +7,8 @@ import org.insa.graphs.algorithm.utils.BinaryHeap;
 import org.insa.graphs.model.Arc;
 import org.insa.graphs.model.Graph;
 import org.insa.graphs.model.Label;
-import org.insa.graphs.model.Label_Nodes;
 import org.insa.graphs.model.Node;
+import org.insa.graphs.model.Path;
 
 public class DijkstraAlgorithm extends ShortestPathAlgorithm {
 
@@ -31,8 +28,6 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
         Node noeud_suivant;
         
         List<Arc> arc_final = null;
-        
-        Path path_sol = null;
         
         
     	double cost_arc;
@@ -125,7 +120,24 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
   
     	//solution.ShortestPathSolution(data,,path_sol.Path(graphe,arc_final));
         
-        solution = new ShortestPathSolution(data, Status.OPTIMAL, new Path(graph, arcs));
+        //solution = new ShortestPathSolution(data, Status.OPTIMAL, new Path(graph, arcs));
+    	
+    	// Destination has no predecessor, the solution is infeasible...
+        if (LL[data.getDestination().getId()].cost == 1/0) {
+            solution = new ShortestPathSolution(data, Status.INFEASIBLE);
+        }
+        
+        else {
+
+            // The destination has been found, notify the observers.
+            notifyDestinationReached(data.getDestination());
+            
+            //Path path_sol = new Path(graphe, arc_final);
+            
+            // Create the final solution.
+            solution = new ShortestPathSolution(data, Status.OPTIMAL, new Path(graphe, arc_final));
+        }
+
     	
     	
         return solution;
