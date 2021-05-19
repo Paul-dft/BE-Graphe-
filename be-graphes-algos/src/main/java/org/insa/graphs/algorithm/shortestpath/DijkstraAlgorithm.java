@@ -1,8 +1,10 @@
 package org.insa.graphs.algorithm.shortestpath;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
+import org.insa.graphs.algorithm.AbstractInputData;
 import org.insa.graphs.algorithm.AbstractSolution.Status;
 import org.insa.graphs.algorithm.utils.BinaryHeap;
 import org.insa.graphs.algorithm.utils.ElementNotFoundException;
@@ -85,12 +87,15 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
     		
     		min = heap.findMin();
     		System.out.print(min.sommet_courant.getId());
-    		heap.deleteMin();
     		noeud_min = min.sommet_courant;
     		
     		// On regarde tous ses sucesseur 
     		
+    		//System.out.print("ok \n ");
+    		
     		for (Arc arc : noeud_min.getSuccessors()) {
+    			
+    			System.out.print("ok \n ");
     			
     			noeud_suivant = arc.getDestination();
     			
@@ -105,20 +110,27 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
     			
     			// Si on se rend compte que le trajet est plus court on remplace le cost 
     			
-    			if (min.cost + cost_arc < label_suivant.cost) {
-    				
-    				label_suivant.cost = min.cost + cost_arc;
-    				label_suivant.pere = arc;
-    				
-    			}
     			
-    			heap.insert(label_suivant);
+    			if (label_suivant.marque == false) {
+    				
+
+        			if (min.cost + cost_arc < label_suivant.cost) {
+        				
+        				label_suivant.cost = min.cost + cost_arc;
+        				label_suivant.pere = arc;
+        				
+        			}
+    			
+    				heap.insert(label_suivant);
+    			}
     		}
     		
     		// On enleve notre noeud minimum 
     		
     		arc_final.add(min.pere);
     		min.marque = true;
+    		heap.remove(min);
+    		
     		
     	}
     	
@@ -139,17 +151,30 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
         }
         
         else {
-
-            // The destination has been found, notify the observers.
+            // mise en place de la liste de noeud 
             notifyDestinationReached(data.getDestination());
-            
-            //Path path_sol = new Path(graphe, arc_final);
-            
-            // Create the final solution.
-            solution = new ShortestPathSolution(data, Status.OPTIMAL, new Path(graphe, arc_final));
-        }
 
-    	
+            ArrayList<Node> pathNodes = new ArrayList<>();
+            pathNodes.add(data.getDestination());
+            Node node = data.getDestination();
+            while (!node.equals(data.getOrigin())) {
+                Node fatherNode = (LL[node.getId()].pere).getOrigin();
+                pathNodes.add(fatherNode);
+                node = fatherNode;
+            }
+            Collections.reverse(pathNodes);
+
+            // Creation du chemin final 
+            
+            Path solutionPath;
+            if (data.getMode().equals(AbstractInputData.Mode.LENGTH)) {
+                solutionPath = Path.createShortestPathFromNodes(graphe, pathNodes);
+            } else {
+                solutionPath = Path.createFastestPathFromNodes(graphe, pathNodes);
+            }
+
+            solution = new ShortestPathSolution(data, Status.OPTIMAL, solutionPath);
+        }
     	
         return solution;
         
