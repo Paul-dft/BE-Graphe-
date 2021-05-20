@@ -86,16 +86,12 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
     		// On prend le label avec le cout minimum
     		
     		min = heap.findMin();
-    		System.out.print(min.sommet_courant.getId());
+
     		noeud_min = min.sommet_courant;
     		
     		// On regarde tous ses sucesseur 
     		
-    		//System.out.print("ok \n ");
-    		
     		for (Arc arc : noeud_min.getSuccessors()) {
-    			
-    			System.out.print("ok \n ");
     			
     			noeud_suivant = arc.getDestination();
     			
