@@ -112,6 +112,8 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
 
         			if (min.cost + cost_arc < label_suivant.cost) {
         				
+        				notifyNodeReached(arc.getDestination());
+        				
         				label_suivant.cost = min.cost + cost_arc;
         				label_suivant.pere = arc;
         				
