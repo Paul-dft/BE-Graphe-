@@ -89,9 +89,21 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
 
     		noeud_min = min.sommet_courant;
     		
+    		min.marque = true;
+    		
+    		heap.remove(min);
+    		
     		// On regarde tous ses sucesseur 
     		
     		for (Arc arc : noeud_min.getSuccessors()) {
+    			
+    			// Small test to check allowed roads...
+                if (!data.isAllowed(arc)) {
+                    continue;
+                }
+                
+                //System.out.print(noeud_min.getSuccessors().size());
+                //System.out.print("\n");
     			
     			noeud_suivant = arc.getDestination();
     			
@@ -126,8 +138,10 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
     		// On enleve notre noeud minimum 
     		
     		arc_final.add(min.pere);
-    		min.marque = true;
-    		heap.remove(min);
+    		//min.marque = true;
+    		System.out.print(min.cost);
+    		System.out.print("\n");
+    		//heap.remove(min);
     		
     		
     	}
