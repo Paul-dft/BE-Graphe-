@@ -1,23 +1,18 @@
 package org.insa.graphs.model;
 
-public class LabelStar extends Label{
+public class LabelStar extends Label implements Comparable <Label>{
 	
-	private double cost_dest;
-	private Node dest; 
+	public double cost_dest;
+	public Node dest; 
 	
-	public LabelStar(Node sommet_courant, boolean marque, double cost, Arc pere) {
+	public LabelStar() {
 		super();
 		
-		this.cost_dest = this.sommet_courant.getPoint().distanceTo(this.dest.getPoint());
 	}
 	
-	public int compareTo(LabelStar label_b) {
-		if (this.cost + this.cost_dest <= label_b.cost + label_b.cost_dest) {
-			return 1;
-		}
-		else {
-			return 0;
-		}
+	public double GetCost(LabelStar labelS) {
+		return(this.cost + this.cost_dest);
 	}
-
+	
+	
 }

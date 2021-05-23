@@ -39,10 +39,7 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
         Label label_suivant;
         Node noeud_min;
         Node noeud_suivant;
-        
-        
-        List<Arc> arc_final = new ArrayList<Arc>();
-        
+       
         
     	double cost_arc;
     	
@@ -137,7 +134,6 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
     		
     		// On enleve notre noeud minimum 
     		
-    		arc_final.add(min.pere);
     		//min.marque = true;
     		System.out.print(min.cost);
     		System.out.print("\n");
