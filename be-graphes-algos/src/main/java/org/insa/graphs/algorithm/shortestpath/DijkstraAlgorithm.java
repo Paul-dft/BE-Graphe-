@@ -51,7 +51,6 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
     	Label Label_origin = new Label();
     	Label_origin.sommet_courant = origine;
     	Label_origin.cost = 0;
-    	//Label_origin.pere = null;
     	
     	
     	// création d'une liste de label pour permettre d'associer un noeud à un label
@@ -61,7 +60,6 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
     		
     		Label l = new Label();
     		l.cost = Double.POSITIVE_INFINITY;
-    		//l.pere = null;
     		l.sommet_courant = n;
     		LL[n.getId()] = l;
     		
@@ -132,7 +130,6 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
     			}
     		}
     		
-    		// On enleve notre noeud minimum 
     		
     		//min.marque = true;
     		System.out.print(min.cost);
@@ -142,15 +139,6 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
     		
     	}
     	
-    	
-    	
-    	
-    	//path_sol = solution.getPath();
-    	//solution.path.Path(graphe,arc_final);
-  
-    	//solution.ShortestPathSolution(data,,path_sol.Path(graphe,arc_final));
-        
-        //solution = new ShortestPathSolution(data, Status.OPTIMAL, new Path(graph, arcs));
     	
     	ShortestPathSolution solution;
 		// Destination has no predecessor, the solution is infeasible...
@@ -165,6 +153,8 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
             ArrayList<Node> pathNodes = new ArrayList<>();
             pathNodes.add(data.getDestination());
             Node node = data.getDestination();
+            
+            //On descend de pere en pere jusqu'a arriver à l'origine 
             while (!node.equals(data.getOrigin())) {
                 Node fatherNode = (LL[node.getId()].pere).getOrigin();
                 pathNodes.add(fatherNode);

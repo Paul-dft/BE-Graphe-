@@ -66,7 +66,7 @@ public class AStarAlgorithm extends DijkstraAlgorithm {
     		//l.pere = null;
     		l.sommet_courant = n;
     		l.dest = data.getDestination();
-    		l.cost_dest = l.sommet_courant.getPoint().distanceTo(l.dest.getPoint()) + l.cost;
+    		l.cost_dest = l.cost;
     		LL[n.getId()] = l;
     		
     	}
@@ -128,7 +128,7 @@ public class AStarAlgorithm extends DijkstraAlgorithm {
         				notifyNodeReached(arc.getDestination());
         				
         				label_suivant.cost = min.cost + cost_arc;
-        				label_suivant.cost_dest = label_suivant.cost_dest + cost_arc;
+        				label_suivant.cost_dest = label_suivant.cost + label_suivant.sommet_courant.getPoint().distanceTo(label_suivant.dest.getPoint());
         				label_suivant.pere = arc;
         				
         			}
@@ -147,15 +147,6 @@ public class AStarAlgorithm extends DijkstraAlgorithm {
     		
     	}
     	
-    	
-    	
-    	
-    	//path_sol = solution.getPath();
-    	//solution.path.Path(graphe,arc_final);
-  
-    	//solution.ShortestPathSolution(data,,path_sol.Path(graphe,arc_final));
-        
-        //solution = new ShortestPathSolution(data, Status.OPTIMAL, new Path(graph, arcs));
     	
     	ShortestPathSolution solution;
 		// Destination has no predecessor, the solution is infeasible...

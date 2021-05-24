@@ -10,8 +10,8 @@ public class LabelStar extends Label implements Comparable <Label>{
 		
 	}
 	
-	public double GetCost(LabelStar labelS) {
-		return(this.cost + this.cost_dest);
+	public double GetCost(LabelStar label) {
+		return(label.cost + label.cost_dest);
 	}
 	
 	

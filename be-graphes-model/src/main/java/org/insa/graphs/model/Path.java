@@ -84,36 +84,7 @@ public class Path {
      */
     public static Path createShortestPathFromNodes(Graph graph, List<Node> nodes)
             throws IllegalArgumentException {
-        /*List<Arc> arcs = new ArrayList<Arc>(); //liste d'arc définitive
-        List<Arc> arcs3 = new ArrayList<Arc>(); //liste des successeurs valides
-        Arc shortArc = null; //arc le plus court
         
-        if (nodes.size() == 1) {
-        	return new Path(graph,nodes.get(0));}
-        
-        for (int i = 0; i<nodes.size() -1; i++) {
-        	
-        	List<Arc> arcs2 = new ArrayList<Arc>(); //liste des successeurs
-        	arcs2 = nodes.get(i).getSuccessors();
-        	
-        	for (Arc arc : arcs2) {
-        		if (arc.getDestination() == nodes.get(i+1)) {arcs3.add(arc);}
-        	}
-        	
-        	if(arcs3.isEmpty()) {throw(new IllegalArgumentException("pas de chemin"));}
-        	
-        	for (Arc arc : arcs3) {
-        		double min = 1.0/0.0;
-        		if (arc.getLength()<min) {
-        			min = arc.getLength();
-        			shortArc = arc;
-        		}
-        	}
-        	
-        	arcs.add(shortArc);
-        
-        }
-        return new Path(graph, arcs);*/
     	
     	if (nodes.size() == 0) {
         	return new Path(graph);
@@ -124,32 +95,37 @@ public class Path {
         
         List<Arc> arcs = new ArrayList<Arc>();
         
-        //For each nodes in the given list, except the last
+        //On parcours tous les noeuds possibles sauf le dernier
         for (int i = 0; i < nodes.size()-1; i++) {
         	
-        	//Initialization
-        	Node node1 = nodes.get(i); //Origin
-        	Node node2 = nodes.get(i+1); //Destination
-        	//shortest arc is the first by default, even if it doesn't go to node2
+        	//On initialise nos variables avec node1 origine et node2 destination
+        	Node node1 = nodes.get(i); 
+        	Node node2 = nodes.get(i+1); 
+        	
+        	//On prend le premier arc comme arc de référence 
         	Arc shortest = node1.getSuccessors().get(0);
 
-        	//Test for each arc between the nodes and look for a faster arc, or at least one that goes to node2
+        	//On test tous les arcs entre le node1 et le node2 
         	for (int k = 1; k < node1.getNumberOfSuccessors();k++) {
         		Arc candidat = node1.getSuccessors().get(k);
-        		if (candidat.getDestination() == node2) { //Is the arc going where we want it to ?
+        		
+        		//On vérifie qu'il va bien vers le node2
+        		if (candidat.getDestination() == node2) { 
         			
-        			//if the first candidate wasn't going to node2 or if we found a faster arc
+        			//On vérifie qu'il va bien au node2 et qu'il est plus petit que l'arc référence
         			if (shortest.getDestination() != node2 || candidat.getLength() < shortest.getLength() ) { // Is it faster ?
-        				shortest = candidat; // Update the shortest arc found
+        				shortest = candidat; 
         			}
         		}
         	}
         	
-    		if (node2 != shortest.getDestination()) { // if nodes aren't connected
+        	//Si l'arc n'est pas connecté on avertie qu'il y'a pas de solution 
+        	
+    		if (node2 != shortest.getDestination()) { 
     			throw (new IllegalArgumentException());
     		}
     		
-    		//If everything is OK, we append the shortest arc to the final list
+    		//on ajoute l'arc valide à la liste 
     		arcs.add(shortest);
         }
 
