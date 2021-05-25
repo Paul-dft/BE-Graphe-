@@ -84,6 +84,10 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
 
     		noeud_min = min.sommet_courant;
     		
+    		System.out.print("id noeud min " + noeud_min.getId() + " cost " + min.cost);
+            System.out.print("\n");
+            
+    		
     		min.marque = true;
     		
     		heap.remove(min);
@@ -101,6 +105,9 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
                 //System.out.print("\n");
     			
     			noeud_suivant = arc.getDestination();
+    			
+    			System.out.print("id successeur " + noeud_suivant.getId() + " cost " + LL[noeud_suivant.getId()].cost);
+                System.out.print("\n");
     			
     			cost_arc = data.getCost(arc);
     			
@@ -125,15 +132,15 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
         				label_suivant.pere = arc;
         				
         			}
-    			
+        			System.out.print("id successeur " + noeud_suivant.getId() + " cost update " + LL[noeud_suivant.getId()].cost);
+                    System.out.print("\n");
     				heap.insert(label_suivant);
     			}
     		}
     		
     		
     		//min.marque = true;
-    		System.out.print(min.cost);
-    		System.out.print("\n");
+    	
     		//heap.remove(min);
     		
     		

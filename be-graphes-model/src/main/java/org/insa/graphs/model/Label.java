@@ -16,18 +16,8 @@ public class Label implements Comparable <Label>{
 
 
 	public int compareTo(Label label_b) {
-		if (GetCost(this)< GetCost(label_b)) {
-			return 1;
-		}
-		if (GetCost(this) == GetCost(label_b)) {
-			if (this.cost <= label_b.cost) {
-				return(1);
-			}
-			else {return(0);}
-		}
-		else {
-			return 0;
-		}
+		
+		return(Double.compare(GetCost(this), label_b.GetCost(label_b)));
 	}
 
 	
